@@ -6,7 +6,7 @@ import { ClerkProvider } from '@clerk/react';
 
 //Import your Publishable Key
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-git if (!PUBLISHABLE_KEY) {
+if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key. Please add your Publishable Key to the .env file.');
 }
 createRoot(document.getElementById('root')).render(
