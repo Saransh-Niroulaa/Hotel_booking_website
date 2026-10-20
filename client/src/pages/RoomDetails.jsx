@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { assets, facilityIcons, roomCommonData, roomsDummyData } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 import { toast } from 'react-hot-toast'
@@ -8,12 +8,13 @@ import Footer from '../components/Footer'
 const RoomDetails = () => {
     const { id } = useParams()
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams()
     const { rooms, currency, getToken, user, axios } = useAppContext()
     const [room, setRoom] = useState(null)
     const [mainImage, setMainImage] = useState(null)
-    const [checkInDate, setCheckInDate] = useState("")
-    const [checkOutDate, setCheckOutDate] = useState("")
-    const [guests, setGuests] = useState(1)
+    const [checkInDate, setCheckInDate] = useState(searchParams.get("checkIn") || "")
+    const [checkOutDate, setCheckOutDate] = useState(searchParams.get("checkOut") || "")
+    const [guests, setGuests] = useState(Number(searchParams.get("guests")) || 1)
     const [isAvailable, setIsAvailable] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 

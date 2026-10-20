@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar"
 import Home from "./pages/Home"
-import { Route, Routes, useLocation } from "react-router-dom"
+import { Route, Routes, useLocation, Navigate } from "react-router-dom"
 import AllRooms from "./pages/AllRooms"
 import RoomDetails from "./pages/RoomDetails"
 import MyBookings from "./pages/MyBookings"
@@ -18,6 +18,8 @@ const App = () => {
             <div className='min-h-[70vh]'>
                 <Routes>
                     <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<Navigate to="/#about" replace />} />
+                    <Route path="/experience" element={<Navigate to="/#experience" replace />} />
                     <Route path="/rooms" element={<AllRooms />} />
                     <Route path="/room/:id" element={<RoomDetails />} />
                     <Route path="/my-bookings" element={<MyBookings />} />

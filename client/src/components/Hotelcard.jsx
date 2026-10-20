@@ -1,13 +1,14 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 
 export const Hotelcard = ({ room, index }) => {
     const { currency } = useAppContext()
+    const location = useLocation()
 
     return (
-        <Link to={`/room/` + room._id} onClick={() => scrollTo(0, 0)} className='relative block max-w-full rounded-xl overflow-hidden bg-white text-gray-500/90 shadow-[0px_4px_4px_rgba(0,0,0,0.05)] hover:shadow-md transition-all'>
+        <Link to={`/room/${room._id}${location.search || ''}`} onClick={() => scrollTo(0, 0)} className='relative block max-w-full rounded-xl overflow-hidden bg-white text-gray-500/90 shadow-[0px_4px_4px_rgba(0,0,0,0.05)] hover:shadow-md transition-all'>
             <img src={room.images[0]} alt="" className='w-full h-48 object-cover' />
             {index % 2 === 0 && (
                 <p className='px-3 py-1 absolute top-3 left-3 text-xs bg-white text-gray-800 font-medium rounded-full shadow-sm'>

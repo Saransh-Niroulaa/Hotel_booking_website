@@ -1,10 +1,32 @@
 import React, { useState } from 'react'
 import { assets } from '../assets/assets'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { toast } from 'react-hot-toast'
 
 const Footer = () => {
     const [email, setEmail] = useState('')
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    const handleNavClick = (path) => {
+        if (path === '/') {
+            if (location.pathname === '/') {
+                window.scrollTo({ top: 0, behavior: 'smooth' })
+            } else {
+                navigate('/')
+            }
+        } else if (path.startsWith('/#')) {
+            const targetId = path.replace('/#', '')
+            if (location.pathname === '/') {
+                const el = document.getElementById(targetId)
+                if (el) el.scrollIntoView({ behavior: 'smooth' })
+            } else {
+                navigate(path)
+            }
+        } else {
+            navigate(path)
+        }
+    }
 
     const handleSubscribe = (e) => {
         e.preventDefault()
@@ -34,10 +56,10 @@ const Footer = () => {
                 <div>
                     <p className='text-white font-medium text-base mb-4'>Company</p>
                     <ul className='flex flex-col gap-2 text-sm'>
-                        <li><Link to="/" onClick={() => scrollTo(0, 0)} className='hover:text-white transition-all'>Home</Link></li>
+                        <li><button onClick={() => handleNavClick('/')} className='hover:text-white transition-all text-left cursor-pointer'>Home</button></li>
                         <li><Link to="/rooms" onClick={() => scrollTo(0, 0)} className='hover:text-white transition-all'>Hotels</Link></li>
-                        <li><Link to="/rooms" onClick={() => scrollTo(0, 0)} className='hover:text-white transition-all'>Experience</Link></li>
-                        <li><Link to="/" onClick={() => scrollTo(0, 0)} className='hover:text-white transition-all'>About</Link></li>
+                        <li><button onClick={() => handleNavClick('/#experience')} className='hover:text-white transition-all text-left cursor-pointer'>Experience</button></li>
+                        <li><button onClick={() => handleNavClick('/#about')} className='hover:text-white transition-all text-left cursor-pointer'>About</button></li>
                     </ul>
                 </div>
 

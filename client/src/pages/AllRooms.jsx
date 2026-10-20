@@ -121,12 +121,31 @@ const AllRooms = () => {
                 {/* Rooms Grid */}
                 <div className='flex-1 w-full'>
                     {/* Recent Searches / Active Search */}
-                    {(searchedCities?.length > 0 || destinationQuery) && (
+                    {(searchedCities?.length > 0 || destinationQuery || searchParams.get('offer') || searchParams.get('checkIn')) && (
                         <div className='flex items-center gap-2 flex-wrap mb-4 pb-2 border-b border-gray-100'>
                             {destinationQuery && (
                                 <span className='inline-flex items-center gap-1.5 text-xs bg-primary/10 text-primary font-medium px-3 py-1 rounded-full'>
-                                    <span>Searching: "{destinationQuery}"</span>
-                                    <button onClick={() => setSearchParams({})} className='text-primary hover:text-black font-bold cursor-pointer'>×</button>
+                                    <span>Location: "{destinationQuery}"</span>
+                                    <button onClick={() => {
+                                        const next = new URLSearchParams(searchParams);
+                                        next.delete('destination');
+                                        setSearchParams(next);
+                                    }} className='text-primary hover:text-black font-bold cursor-pointer'>×</button>
+                                </span>
+                            )}
+                            {searchParams.get('offer') && (
+                                <span className='inline-flex items-center gap-1.5 text-xs bg-amber-500/10 text-amber-700 font-medium px-3 py-1 rounded-full'>
+                                    <span>Package: {searchParams.get('offer')}</span>
+                                    <button onClick={() => {
+                                        const next = new URLSearchParams(searchParams);
+                                        next.delete('offer');
+                                        setSearchParams(next);
+                                    }} className='text-amber-700 hover:text-black font-bold cursor-pointer'>×</button>
+                                </span>
+                            )}
+                            {searchParams.get('checkIn') && (
+                                <span className='inline-flex items-center gap-1.5 text-xs bg-gray-100 text-gray-700 font-medium px-3 py-1 rounded-full'>
+                                    <span>{searchParams.get('checkIn')} → {searchParams.get('checkOut') || 'Flexible'} ({searchParams.get('guests') || 1} {Number(searchParams.get('guests')) > 1 ? 'guests' : 'guest'})</span>
                                 </span>
                             )}
                             {searchedCities?.map((city, idx) => (
