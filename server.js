@@ -10,7 +10,16 @@ const app = express()
 
 connectDB()
 
-app.use(cors({ origin: process.env.FRONTEND_URL, credentials: true }))
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || !process.env.FRONTEND_URL || origin === process.env.FRONTEND_URL || origin.endsWith(".vercel.app") || origin.includes("localhost")) {
+            callback(null, true)
+        } else {
+            callback(null, true)
+        }
+    },
+    credentials: true
+}))
 
 app.use("/api/user/clerk", express.raw({ type: "application/json" }))
 
@@ -24,4 +33,8 @@ app.use("/api/bookings", bookingRoutes)
 app.get("/", (req, res) => res.send("QuickStay API is running"))
 
 const PORT = process.env.PORT || 3000
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+if (process.env.NODE_ENV !== "production" || !process.env.VERCEL) {
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`))
+}
+
+module.exports = app
