@@ -3,7 +3,7 @@ import { useAuth, useUser } from "@clerk/react"
 import axios from "axios"
 import { toast } from "react-hot-toast"
 
-axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL || ""
 
 export const AppContext = createContext()
 
