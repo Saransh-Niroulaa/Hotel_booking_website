@@ -1,3 +1,5 @@
+const path = require("path")
+require("dotenv").config({ path: path.resolve(__dirname, "../.env") })
 require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
@@ -26,16 +28,14 @@ app.use("/api/user/clerk", express.raw({ type: "application/json" }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const path = require("path")
-
-app.use(express.static(path.join(__dirname, "client", "dist")))
+app.use(express.static(path.join(__dirname, "../client", "dist")))
 
 app.use("/api/user", userRoutes)
 app.use("/api/rooms", hotelRoutes)
 app.use("/api/bookings", bookingRoutes)
 
 app.use((req, res) => {
-    const indexPath = path.join(__dirname, "client", "dist", "index.html")
+    const indexPath = path.join(__dirname, "../client", "dist", "index.html")
     res.sendFile(indexPath, (err) => {
         if (err) res.send("QuickStay Hotel Booking")
     })
