@@ -2,15 +2,24 @@
 
 @import "tailwindcss";
 
-@theme{
+@theme {
   --color-primary: #1E3A8A;
   --color-secondary: #F59E0B;
+  --font-playfair: "Playfair", serif;
 }
 
 * {
-  font-family: Outfit;
+  font-family: "Outfit", sans-serif;
+}
+
+.font-playfair {
+  font-family: "Playfair", serif !important;
 }
 
 .fontplayfair {
-  font-family: Playfair !important;
+  font-family: "Playfair", serif !important;
+}
+
+.inverted {
+  filter: invert(1);
 }
