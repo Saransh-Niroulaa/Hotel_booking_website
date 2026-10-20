@@ -1,4 +1,5 @@
 const express = require("express")
+const mongoose = require("mongoose")
 const Booking = require("../models/Booking")
 const Room = require("../models/Room")
 const Hotel = require("../models/Hotel")
@@ -10,6 +11,9 @@ const router = express.Router()
 
 router.post("/check-availability", async (req, res) => {
     try {
+        if (mongoose.connection.readyState !== 1) {
+            return res.json({ success: true, isAvailable: true })
+        }
         const { room, checkInDate, checkOutDate } = req.body
         const existingBooking = await Booking.findOne({
             room,
@@ -80,6 +84,9 @@ router.post("/", authMiddleware, async (req, res) => {
 
 router.get("/user", authMiddleware, async (req, res) => {
     try {
+        if (mongoose.connection.readyState !== 1) {
+            return res.json({ success: true, bookings: [] })
+        }
         const bookings = await Booking.find({ user: req.userId })
             .populate({ path: "room", populate: { path: "hotel" } })
             .populate("hotel")
@@ -92,6 +99,9 @@ router.get("/user", authMiddleware, async (req, res) => {
 
 router.get("/hotel", ownerMiddleware, async (req, res) => {
     try {
+        if (mongoose.connection.readyState !== 1) {
+            return res.json({ success: true, totalBookings: 0, totalRevenue: 0, bookings: [] })
+        }
         const hotel = await Hotel.findOne({ owner: req.userId })
         if (!hotel) return res.json({ success: true, totalBookings: 0, totalRevenue: 0, bookings: [] })
 

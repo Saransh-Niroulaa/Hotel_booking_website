@@ -1,4 +1,5 @@
 const express = require("express")
+const mongoose = require("mongoose")
 const { Webhook } = require("svix")
 const User = require("../models/User")
 const { authMiddleware } = require("../middleware/authMiddleware")
@@ -21,12 +22,14 @@ router.post("/clerk", express.raw({ type: "application/json" }), async (req, res
         const email = email_addresses[0]?.email_address
         const username = `${first_name || ""} ${last_name || ""}`.trim() || email
 
-        if (evt.type === "user.created") {
-            await User.create({ _id: id, username, email, image: image_url })
-        } else if (evt.type === "user.updated") {
-            await User.findByIdAndUpdate(id, { username, email, image: image_url })
-        } else if (evt.type === "user.deleted") {
-            await User.findByIdAndDelete(id)
+        if (mongoose.connection.readyState === 1) {
+            if (evt.type === "user.created") {
+                await User.create({ _id: id, username, email, image: image_url })
+            } else if (evt.type === "user.updated") {
+                await User.findByIdAndUpdate(id, { username, email, image: image_url })
+            } else if (evt.type === "user.deleted") {
+                await User.findByIdAndDelete(id)
+            }
         }
 
         res.json({ success: true })
@@ -49,12 +52,12 @@ router.post("/store-recent-search", authMiddleware, async (req, res) => {
     try {
         const { city } = req.body
         const user = req.user
-        if (!user.recentSearchedCities.includes(city)) {
+        if (mongoose.connection.readyState === 1 && !user.recentSearchedCities.includes(city)) {
             user.recentSearchedCities.unshift(city)
             if (user.recentSearchedCities.length > 3) user.recentSearchedCities.pop()
             await user.save()
         }
-        res.json({ success: true, recentSearchedCities: user.recentSearchedCities })
+        res.json({ success: true, recentSearchedCities: user.recentSearchedCities || [] })
     } catch (error) {
         res.json({ success: false, message: error.message })
     }

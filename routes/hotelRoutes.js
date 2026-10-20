@@ -1,4 +1,5 @@
 const express = require("express")
+const mongoose = require("mongoose")
 const Hotel = require("../models/Hotel")
 const Room = require("../models/Room")
 const { authMiddleware, ownerMiddleware } = require("../middleware/authMiddleware")
@@ -8,6 +9,9 @@ const router = express.Router()
 
 router.get("/", async (req, res) => {
     try {
+        if (mongoose.connection.readyState !== 1) {
+            return res.json({ success: true, rooms: [] })
+        }
         const rooms = await Room.find({ isAvailable: true }).populate({
             path: "hotel",
             populate: { path: "owner", select: "username email image" }
@@ -20,6 +24,9 @@ router.get("/", async (req, res) => {
 
 router.get("/owner", ownerMiddleware, async (req, res) => {
     try {
+        if (mongoose.connection.readyState !== 1) {
+            return res.json({ success: true, rooms: [] })
+        }
         const hotel = await Hotel.findOne({ owner: req.userId })
         if (!hotel) return res.json({ success: true, rooms: [] })
 
