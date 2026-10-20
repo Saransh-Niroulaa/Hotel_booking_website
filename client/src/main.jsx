@@ -11,7 +11,7 @@ if (!PUBLISHABLE_KEY) {
   throw new Error('Missing Publishable Key. Please add your Publishable Key to the .env file.');
 }
 createRoot(document.getElementById('root')).render(
-  <ClerkProvider publishableKey={PUBLISHABLE_KEY}>
+  <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
     <BrowserRouter>
       <AppContextProvider>
         <Toaster />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { assets, facilityIcons, roomCommonData, roomsDummyData } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
 import { toast } from 'react-hot-toast'
@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 
 const RoomDetails = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const { rooms, currency, getToken, user, axios } = useAppContext()
     const [room, setRoom] = useState(null)
     const [mainImage, setMainImage] = useState(null)
@@ -64,7 +65,7 @@ const RoomDetails = () => {
             const totalPrice = totalNights * room.pricePerNight
             const { data } = await axios.post("/api/bookings", {
                 room: id,
-                hotel: room.hotel._id,
+                hotel: room.hotel?._id || "default_hotel",
                 checkInDate,
                 checkOutDate,
                 totalPrice,
@@ -77,6 +78,7 @@ const RoomDetails = () => {
                 setCheckInDate("")
                 setCheckOutDate("")
                 setGuests(1)
+                setTimeout(() => navigate('/my-bookings'), 1200)
             } else {
                 toast.error(data.message)
             }

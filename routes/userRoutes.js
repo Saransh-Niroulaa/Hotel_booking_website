@@ -52,12 +52,44 @@ router.post("/store-recent-search", authMiddleware, async (req, res) => {
     try {
         const { city } = req.body
         const user = req.user
-        if (mongoose.connection.readyState === 1 && !user.recentSearchedCities.includes(city)) {
+        if (mongoose.connection.readyState === 1 && !user.recentSearchedCities?.includes(city)) {
             user.recentSearchedCities.unshift(city)
             if (user.recentSearchedCities.length > 3) user.recentSearchedCities.pop()
             await user.save()
         }
         res.json({ success: true, recentSearchedCities: user.recentSearchedCities || [] })
+    } catch (error) {
+        res.json({ success: false, message: error.message })
+    }
+})
+
+router.post("/register-hotel", authMiddleware, async (req, res) => {
+    try {
+        const { name, address, contact, city } = req.body
+        const user = req.user
+
+        if (mongoose.connection.readyState === 1) {
+            const Hotel = require("../models/Hotel")
+            await User.findByIdAndUpdate(req.userId, { role: "hotelOwner" })
+            let hotel = await Hotel.findOne({ owner: req.userId })
+            if (hotel) {
+                hotel.name = name || hotel.name
+                hotel.address = address || hotel.address
+                hotel.contact = contact || hotel.contact
+                hotel.city = city || hotel.city
+                await hotel.save()
+            } else {
+                hotel = await Hotel.create({
+                    name: name || `${user.username || 'User'}'s Hotel`,
+                    address: address || "City Center",
+                    contact: contact || "+1234567890",
+                    owner: req.userId,
+                    city: city || "New York"
+                })
+            }
+        }
+
+        res.json({ success: true, role: "hotelOwner" })
     } catch (error) {
         res.json({ success: false, message: error.message })
     }

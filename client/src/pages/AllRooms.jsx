@@ -21,10 +21,10 @@ const roomTypeFilters = [
 ]
 
 const AllRooms = () => {
-    const [searchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const destinationQuery = searchParams.get('destination') || ''
 
-    const { rooms } = useAppContext()
+    const { rooms, searchedCities } = useAppContext()
     const [filteredRooms, setFilteredRooms] = useState([])
     const [selectedFilters, setSelectedFilters] = useState({ rating: [], roomType: [], priceRange: 5000 })
     const [sortBy, setSortBy] = useState('relevance')
@@ -120,6 +120,27 @@ const AllRooms = () => {
 
                 {/* Rooms Grid */}
                 <div className='flex-1 w-full'>
+                    {/* Recent Searches / Active Search */}
+                    {(searchedCities?.length > 0 || destinationQuery) && (
+                        <div className='flex items-center gap-2 flex-wrap mb-4 pb-2 border-b border-gray-100'>
+                            {destinationQuery && (
+                                <span className='inline-flex items-center gap-1.5 text-xs bg-primary/10 text-primary font-medium px-3 py-1 rounded-full'>
+                                    <span>Searching: "{destinationQuery}"</span>
+                                    <button onClick={() => setSearchParams({})} className='text-primary hover:text-black font-bold cursor-pointer'>×</button>
+                                </span>
+                            )}
+                            {searchedCities?.map((city, idx) => (
+                                <button
+                                    key={idx}
+                                    onClick={() => setSearchParams({ destination: city })}
+                                    className={`text-xs px-3 py-1 rounded-full transition-all cursor-pointer ${destinationQuery.toLowerCase() === city.toLowerCase() ? "bg-black text-white" : "bg-gray-100 hover:bg-gray-200 text-gray-700"}`}
+                                >
+                                    {city}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
                     <div className='flex items-center justify-between mb-8'>
                         <h1 className='text-2xl md:text-3xl font-medium'>
                             Hotels List

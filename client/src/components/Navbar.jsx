@@ -49,18 +49,18 @@ const Navbar = () => {
 
             <div className="hidden md:flex items-center gap-4 lg:gap-8">
                 {navLinks.map((link, i) => (
-                    <a key={i} href={link.path} className={`group flex flex-col gap-0.5 ${isScrolled ? "text-gray-700" : "text-white"}`}>
+                    <Link key={i} to={link.path} className={`group flex flex-col gap-0.5 ${isScrolled ? "text-gray-700" : "text-white"}`}>
                         {link.name}
                         <div className={`${isScrolled ? "bg-gray-700" : "bg-white"} h-0.5 w-0 group-hover:w-full transition-all duration-300`} />
-                    </a>
+                    </Link>
                 ))}
-                <button onClick={() => navigate('/owner')} className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all`}>
+                <button onClick={() => user ? navigate('/owner') : openSignIn()} className={`border px-4 py-1 text-sm font-light rounded-full cursor-pointer ${isScrolled ? 'text-black' : 'text-white'} transition-all hover:opacity-80`}>
                     Dashboard
                 </button>
             </div>
 
             <div className="hidden md:flex items-center gap-4">
-                <img src={assets.searchIcon} alt="search" className={`${isScrolled && "inverted"} h-7 transition-all duration-500`} />
+                <img onClick={() => navigate('/rooms')} src={assets.searchIcon} alt="search" className={`${isScrolled && "inverted"} h-7 transition-all duration-500 cursor-pointer hover:scale-105`} />
                 {user ? (
                     <UserButton>
                         <UserButton.MenuItems>
@@ -68,7 +68,7 @@ const Navbar = () => {
                         </UserButton.MenuItems>
                     </UserButton>
                 ) : (
-                    <button onClick={() => openSignIn()} className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 ${isScrolled ? "text-white bg-black" : "bg-white text-black"}`}>
+                    <button onClick={() => openSignIn()} className={`px-8 py-2.5 rounded-full ml-4 transition-all duration-500 cursor-pointer ${isScrolled ? "text-white bg-black" : "bg-white text-black"}`}>
                         Login
                     </button>
                 )}
@@ -87,16 +87,16 @@ const Navbar = () => {
 
             <div className={`fixed top-0 left-0 w-full h-screen bg-white text-base flex flex-col md:hidden items-center justify-center gap-6 font-medium text-gray-800 transition-all duration-500 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
                 <button className="absolute top-4 right-4" onClick={() => setIsMenuOpen(false)}>
-                    <img src={assets.closeIcon} alt="close-menu" className="h-6.5" />
+                    <img src={assets.closeIcon} alt="close-menu" className="h-6.5 cursor-pointer" />
                 </button>
 
                 {navLinks.map((link, i) => (
-                    <a key={i} href={link.path} onClick={() => setIsMenuOpen(false)}>
+                    <Link key={i} to={link.path} onClick={() => setIsMenuOpen(false)}>
                         {link.name}
-                    </a>
+                    </Link>
                 ))}
 
-                <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all" onClick={() => { setIsMenuOpen(false); navigate('/owner') }}>
+                <button className="border px-4 py-1 text-sm font-light rounded-full cursor-pointer transition-all" onClick={() => { setIsMenuOpen(false); user ? navigate('/owner') : openSignIn() }}>
                     Dashboard
                 </button>
 

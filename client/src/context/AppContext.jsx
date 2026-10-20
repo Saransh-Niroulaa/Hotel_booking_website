@@ -32,6 +32,7 @@ export const AppContextProvider = ({ children }) => {
     const fetchUser = async () => {
         try {
             const token = await getToken()
+            if (!token) return
             const { data } = await axios.get("/api/user", {
                 headers: { Authorization: `Bearer ${token}` }
             })
@@ -39,10 +40,10 @@ export const AppContextProvider = ({ children }) => {
                 setIsOwner(data.role === "hotelOwner")
                 setSearchedCities(data.recentSearchedCities || [])
             } else {
-                toast.error(data.message)
+                console.warn(data.message)
             }
         } catch (error) {
-            toast.error(error.message)
+            console.warn(error.message)
         }
     }
 

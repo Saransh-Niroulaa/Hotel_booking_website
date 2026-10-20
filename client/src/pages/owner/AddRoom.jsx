@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { assets } from '../../assets/assets'
 import { useAppContext } from '../../context/AppContext'
 import { toast } from 'react-hot-toast'
@@ -7,7 +8,8 @@ const roomTypes = ["Single Bed", "Double Bed", "Luxury Room", "Family Suite"]
 const amenitiesList = ["Free WiFi", "Free Breakfast", "Room Service", "Mountain View", "Pool Access"]
 
 const AddRoom = () => {
-    const { getToken, axios } = useAppContext()
+    const navigate = useNavigate()
+    const { getToken, axios, fetchRooms } = useAppContext()
     const [images, setImages] = useState({ 1: null, 2: null, 3: null, 4: null })
     const [roomType, setRoomType] = useState("Single Bed")
     const [pricePerNight, setPricePerNight] = useState(100)
@@ -48,6 +50,8 @@ const AddRoom = () => {
                 setRoomType("Single Bed")
                 setPricePerNight(100)
                 setAmenities([])
+                if (fetchRooms) fetchRooms()
+                setTimeout(() => navigate('/owner/list-rooms'), 1200)
             } else {
                 toast.error(data.message)
             }
