@@ -2,10 +2,13 @@
   "name": "hotekbooking",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "start": "node server/server.js",
-    "dev": "nodemon server/server.js",
-    "build": "npm install --prefix client && npm run build --prefix client"
+    "server": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -14,13 +17,11 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Saransh-Niroulaa/Hotel_booking_website/issues"
-  },
-  "homepage": "https://github.com/Saransh-Niroulaa/Hotel_booking_website#readme",
   "dependencies": {
     "@clerk/backend": "^3.25.0",
+    "@clerk/react": "^6.15.1",
+    "@tailwindcss/vite": "^4.3.3",
+    "axios": "^1.20.0",
     "cloudinary": "^2.11.0",
     "cors": "^2.8.6",
     "dotenv": "^18.0.8",
@@ -28,9 +29,16 @@
     "mongoose": "^9.11.2",
     "multer": "^2.4.0",
     "nodemailer": "^10.1.7",
-    "svix": "^2.8.0"
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-hot-toast": "^2.6.1",
+    "react-router-dom": "^7.18.3",
+    "svix": "^2.8.0",
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "@vitejs/plugin-react": "^6.1.0",
+    "nodemon": "^3.1.14",
+    "vite": "^8.2.2"
   }
 }
